@@ -24,8 +24,8 @@ public class PurchaseOrderPerline {
     private Integer quantity;
 
     @Column(name = "unit_price", nullable = false)
-    private Integer unitPrice = 0;
+    private Double unitPrice = 0.0;
 
     @Column(name = "total_amount", nullable = false)
-    private Integer totalAmount = 0;
+    private Double totalAmount = 0.0;
 }

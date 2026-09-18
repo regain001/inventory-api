@@ -38,8 +38,11 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public Customer getById(@PathVariable Long id) throws UserInputValidationException {
-        return customerService.getCustomerById(id);
+    public ResponseDto getById(@PathVariable Long id) throws UserInputValidationException {
+        ResponseDto ret = new ResponseDto();
+        Customer customer = customerService.getCustomerById(id);
+        ret.setData(customer);
+        return ret;
     }
 
     @PostMapping

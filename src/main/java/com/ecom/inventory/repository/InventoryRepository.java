@@ -58,7 +58,7 @@ public class InventoryRepository {
 
     public void insertLedgerEntry(Long productId, String type, Integer signedQty,
                                   String refType, Long refId, String refNumber, LocalDate txnDate,
-                                  Double balanceAfter, Long userId, String note) {
+                                  Integer balanceAfter, Long userId, String note) {
         String sql = """
             INSERT INTO inventory_ledger
                 (product_id, transaction_type, quantity, reference_type, reference_id,

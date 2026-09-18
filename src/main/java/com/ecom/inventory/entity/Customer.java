@@ -1,5 +1,6 @@
 package com.ecom.inventory.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("customerId")
     private Long id;
     @Column(name = "customer_name", nullable = false)
     private String customerName;
