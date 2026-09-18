@@ -1,0 +1,9 @@
+package com.ecom.inventory.repository;
+
+import com.ecom.inventory.entity.AppUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+}
