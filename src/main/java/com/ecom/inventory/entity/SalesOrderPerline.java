@@ -1,8 +1,8 @@
 package com.ecom.inventory.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Entity
 @Table(name = "sales_order_perline")
@@ -23,9 +23,28 @@ public class SalesOrderPerline {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_price", nullable = false)
-    private Integer unitPrice = 0;
+    @Column(name = "base_price", nullable = false)
+    private Double basePrice;
 
-    @Column(name = "total_amount", nullable = false)
-    private Integer totalAmount = 0;
+    @Column(name = "is_discount_applied", nullable = false)
+    private boolean discountApplied;
+
+    /** Discount PER UNIT. */
+    @Column(name = "discount_amount")
+    private Double discountAmount;
+
+    @Column(name = "discount_percentage")
+    private Double discountPercentage;
+
+    @Column(name = "unit_price", nullable = false)
+    private Double unitPrice;
+
+    @Column(name = "extended_price", nullable = false)
+    private Double extendedPrice;
+
+    @Column(name = "net_amount", nullable = false)
+    private Double netAmount;
+
+    @Column(name = "unit_of_measure", length = 20)
+    private String unitOfMeasure;
 }

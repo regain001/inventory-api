@@ -35,18 +35,20 @@ public class PurchaseOrderController {
 
     @PostMapping
     public ResponseDto create(@RequestBody PurchaseOrderSaveDto dto) throws UserInputValidationException {
+        Long id = purchaseOrderService.saveOrUpdatePurchaseOrder(dto);
         ResponseDto ret = new ResponseDto();
-        String msg = purchaseOrderService.saveOrUpdatePurchaseOrder(dto);
-        ret.setMessage(msg);
+        ret.setMessage("Purchase order saved successfully");
+        ret.setData(id);
         return ret;
     }
 
     @PutMapping("/{id}")
     public ResponseDto update(@PathVariable Long id, @RequestBody PurchaseOrderSaveDto dto) throws UserInputValidationException {
-        ResponseDto ret = new ResponseDto();
         dto.setPurchaseOrderId(id);
-        String msg = purchaseOrderService.saveOrUpdatePurchaseOrder(dto);
-        ret.setMessage(msg);
+        Long savedId = purchaseOrderService.saveOrUpdatePurchaseOrder(dto);
+        ResponseDto ret = new ResponseDto();
+        ret.setMessage("Purchase order updated successfully");
+        ret.setData(savedId);
         return ret;
     }
 

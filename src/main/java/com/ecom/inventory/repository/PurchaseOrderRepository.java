@@ -26,4 +26,14 @@ public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Lo
     String findLastDocumentNumberByPrefix(
             @Param("prefix") String prefix
     );
+
+    /** Atomic, race-free counter per prefix (e.g. 'DO0926'). Rolls back with the transaction. */
+    @Query(value = """
+            INSERT INTO purchase_order_counter (prefix, last_value) VALUES (:prefix, 1)
+            ON CONFLICT (prefix) DO UPDATE SET last_value = purchase_order_counter.last_value + 1
+            RETURNING last_value
+            """, nativeQuery = true)
+    Long nextDocumentSequence(@Param("prefix") String prefix);
+
+
 }

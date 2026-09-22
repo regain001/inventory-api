@@ -216,7 +216,7 @@ public class PurchaseOrderService {
 
 
     @Transactional
-    public String saveOrUpdatePurchaseOrder(PurchaseOrderSaveDto dto) throws UserInputValidationException {
+    public Long saveOrUpdatePurchaseOrder(PurchaseOrderSaveDto dto) throws UserInputValidationException {
 
         // TODO: role check (ADMIN only)
 
@@ -320,30 +320,40 @@ public class PurchaseOrderService {
         }
 
 
-        return "Purchase order saved successfully";
+        return savedOrder.getId();
     }
 
-    public String generateDocumentNumber() {
-
+    private String generateDocumentNumber() {
         LocalDate today = LocalDate.now();
-
-        String month = String.format("%02d", today.getMonthValue());
-        String year = String.format("%02d", today.getYear() % 100);
-
-        String prefix = "DO" + month + year;
-
-        String lastDocumentNumber = purchaseOrderRepository.findLastDocumentNumberByPrefix(prefix);
-
-        int sequence = 1;
-
-        if (lastDocumentNumber != null) {
-            String sequencePart = lastDocumentNumber.substring(prefix.length());
-
-            sequence = Integer.parseInt(sequencePart) + 1;
-        }
-
-        return prefix + String.format("%05d", sequence);
+        String prefix = "PO"
+                + String.format("%02d", today.getMonthValue())
+                + String.format("%02d", today.getYear() % 100);      // SO0926
+        Long seq = purchaseOrderRepository.nextDocumentSequence(prefix);
+        return prefix + String.format("%05d", seq);                  // SO092600001
     }
+
+
+//    public String generateDocumentNumber() {
+//
+//        LocalDate today = LocalDate.now();
+//
+//        String month = String.format("%02d", today.getMonthValue());
+//        String year = String.format("%02d", today.getYear() % 100);
+//
+//        String prefix = "DO" + month + year;
+//
+//        String lastDocumentNumber = purchaseOrderRepository.findLastDocumentNumberByPrefix(prefix);
+//
+//        int sequence = 1;
+//
+//        if (lastDocumentNumber != null) {
+//            String sequencePart = lastDocumentNumber.substring(prefix.length());
+//
+//            sequence = Integer.parseInt(sequencePart) + 1;
+//        }
+//
+//        return prefix + String.format("%05d", sequence);
+//    }
 
     private void validatePurchaseOrder(PurchaseOrderSaveDto dto) throws UserInputValidationException {
 
@@ -403,6 +413,11 @@ public class PurchaseOrderService {
             lineDto.setProductId(line.getProductId());
             lineDto.setQuantity(line.getQuantity());
             lineDto.setUnitPrice(line.getUnitPrice());
+            lineDto.setPerlineTotalAmount(line.getTotalAmount());
+            productRepository.findById(line.getProductId()).ifPresent(p -> {
+                lineDto.setProductCode(p.getSku());
+                lineDto.setProductName(p.getProductName());
+            });
             lineDtos.add(lineDto);
         }
 
